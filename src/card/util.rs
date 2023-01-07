@@ -1,7 +1,7 @@
-use yew::prelude::*;
+use itertools::{EitherOrBoth, Itertools};
 use lazy_static::lazy_static;
 use regex::*;
-use itertools::{Itertools, EitherOrBoth};
+use yew::prelude::*;
 
 pub(super) fn task_value_as_html(value: &str) -> Html {
     html! {
@@ -14,12 +14,18 @@ pub(super) fn task_value_as_html(value: &str) -> Html {
 
 fn line_to_html(value: &str) -> Html {
     lazy_static! {
-        static ref RE: Regex = Regex::new(r#"https?://[\w!\?/\+\-_~=;\.,\*&@#\$%\(\)'\[\]]+"#).unwrap();
+        static ref RE: Regex =
+            Regex::new(r#"https?://[\w!\?/\+\-_~=;\.,\*&@#\$%\(\)'\[\]]+"#).unwrap();
     }
 
-    let normal = RE.split(value).map(move |value| html!{ <>{ value }</> }).collect::<Vec<_>>();
+    let normal = RE
+        .split(value)
+        .map(move |value| html! { <>{ value }</> })
+        .collect::<Vec<_>>();
     let urls = RE.find_iter(value).map(move |mat| mat.as_str().to_string()); //.collect::<Vec<_>>();
-    let links = urls.map(move |url| html!{ <a href={ url.clone() }>{ url }</a> }).collect::<Vec<_>>();
+    let links = urls
+        .map(move |url| html! { <a href={ url.clone() }>{ url }</a> })
+        .collect::<Vec<_>>();
 
     let mut nodes = vec![];
     for pair in normal.into_iter().zip_longest(links.into_iter()) {
@@ -28,13 +34,13 @@ fn line_to_html(value: &str) -> Html {
             Both(normal, link) => {
                 nodes.push(normal);
                 nodes.push(link);
-            },
+            }
             Left(normal) => {
                 nodes.push(normal);
-            },
+            }
             Right(link) => {
                 nodes.push(link);
-            },
+            }
         }
     }
 
@@ -44,4 +50,3 @@ fn line_to_html(value: &str) -> Html {
         </>
     }
 }
-

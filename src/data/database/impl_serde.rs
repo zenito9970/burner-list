@@ -45,7 +45,7 @@ impl<'de> Visitor<'de> for DataBaseFieldVisitor {
 impl<'de> Deserialize<'de> for DataBaseField {
     fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
     where
-        D: serde::Deserializer<'de>
+        D: serde::Deserializer<'de>,
     {
         deserializer.deserialize_identifier(DataBaseFieldVisitor)
     }

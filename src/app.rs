@@ -25,9 +25,7 @@ impl<'a> Component for App {
     fn update(&mut self, _ctx: &Context<Self>, msg: Self::Message) -> bool {
         use AppMsg::*;
         let res = match msg {
-            TaskEvent(e) => {
-                self.db.apply_event(&e)
-            }
+            TaskEvent(e) => self.db.apply_event(&e),
             Burn => {
                 self.db.burn_tasks(TaskRank::Primary);
                 true

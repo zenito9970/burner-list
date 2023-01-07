@@ -1,5 +1,5 @@
-use crate::prelude::*;
 use crate::card::util::*;
+use crate::prelude::*;
 use std::rc::Rc;
 use uuid::Uuid;
 use web_sys::HtmlTextAreaElement;
@@ -79,7 +79,9 @@ impl Component for Card {
                     let input_value = input.value();
                     log::debug!("blur, id: {}, value: {}", id, input_value);
                     if input_value.is_empty() {
-                        ctx.props().onedit.emit(TaskEvent::Delete(TaskDeleteData { id }));
+                        ctx.props()
+                            .onedit
+                            .emit(TaskEvent::Delete(TaskDeleteData { id }));
                     } else if value != input_value {
                         ctx.props().onedit.emit(TaskEvent::Edit(TaskEditData {
                             id,
