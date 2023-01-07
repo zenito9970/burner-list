@@ -24,9 +24,9 @@ impl<'a> Component for App {
 
     fn update(&mut self, _ctx: &Context<Self>, msg: Self::Message) -> bool {
         use AppMsg::*;
-        match msg {
+        let res = match msg {
             TaskEvent(e) => {
-                return self.db.apply_event(&e);
+                self.db.apply_event(&e)
             }
             Burn => {
                 self.db.burn_tasks(TaskRank::Primary);
@@ -36,7 +36,10 @@ impl<'a> Component for App {
                 self.db.swap_tasks(TaskRank::Primary, TaskRank::Secondary);
                 true
             }
-        }
+        };
+
+        self.db.save_to_local_storage();
+        res
     }
 
     fn view(&self, ctx: &Context<Self>) -> Html {

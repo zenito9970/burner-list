@@ -63,6 +63,12 @@ impl DataBase {
         }
     }
 
+    pub fn save_to_local_storage(&self) {
+        if let Err(e) = LocalStorage::set("tasks", self) {
+            log::error!("{}", e);
+        }
+    }
+
     pub fn apply_event(&mut self, event: &TaskEvent) -> bool {
         log::debug!("[database] {:?}", event);
         // log::debug!("[database] {:#?}", self);
